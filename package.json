@@ -1,0 +1,19 @@
+{
+  "name": "fcc-voting-app",
+  "version": "1.0.0",
+  "description": "Free Code Camp Voting App",
+  "main": "server.js",
+  "author": "Jack P.",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "connect-mongo": "^1.3.2",
+    "dotenv": "^2.0.0",
+    "ejs": "^2.5.1",
+    "express": "^4.14.0",
+    "express-session": "^1.14.1",
+    "mongoose": "^4.6.0",
+    "mongoose-findorcreate": "^0.1.2",
+    "passport": "^0.3.2",
+    "passport-github2": "^0.1.10"
+  }
+}
