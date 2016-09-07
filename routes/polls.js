@@ -77,13 +77,13 @@ router.post('/api/polls/:id/vote', function(req, res){
       return res.status(500).send(error);
     }
 
+    // If the user isn't logged in, use their IP
     var userIdentifier = req.user ? req.user.id : req.connection.remoteAddress;
 
-    if (!poll.voted) {
-      poll.voted = {};
-    }
-
-    if (!poll.voted.hasOwnProperty(userIdentifier)) {
+    // Make sure the user hasn't already voted
+    if (poll.voted.indexOf(userIdentifier) >= 0) {
+      return res.status(400).json({ error: 'You have already voted' });
+    } else {
       var choiceId = req.body.choiceId;
 
       // Make sure its a valid choice
@@ -104,12 +104,8 @@ router.post('/api/polls/:id/vote', function(req, res){
         return res.status(400).json({ error: 'You must login to use a custom choice' });
       }
 
-      // Set user as voted with their choice
-      if (typeof poll.voted !== 'object') {
-        poll.voted = {}
-      }
-
-      poll.voted[userIdentifier] = choiceId;
+      // Add the user to the voted array
+      poll.voted.push(userIdentifier);
 
       // Update votes
       if (poll.votes.hasOwnProperty(choiceId)) {
@@ -134,8 +130,6 @@ router.post('/api/polls/:id/vote', function(req, res){
           votes: poll.votes
         });
       });
-    } else {
-      res.status(400).json({ error: 'You have already voted' });
     }
   });
 });

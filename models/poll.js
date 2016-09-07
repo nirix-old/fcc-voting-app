@@ -24,8 +24,8 @@ var Poll = new mongoose.Schema({
       message: 'You must have at least two unique choices'
     }
   },
-  votes: mongoose.Schema.Types.Mixed,
-  voted: mongoose.Schema.Types.Mixed
+  votes: Array,
+  voted: Array
 });
 
 module.exports = mongoose.model('Poll', Poll);
