@@ -1,6 +1,7 @@
 
 var Link = window.ReactRouter.Link;
 
+// This allows us to add the active class to the Bootstrap navbar `<li>` elements.
 window.NavLink = React.createClass({
   contextTypes: {
     router: React.PropTypes.object
@@ -18,6 +19,7 @@ window.NavLink = React.createClass({
   }
 });
 
+// Easily render form errors.
 window.ErrorsAlert = React.createClass({
   render: function(){
     if (this.props.errors.length > 0) {

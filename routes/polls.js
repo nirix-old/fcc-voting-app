@@ -5,10 +5,12 @@ var Poll = require('../models/poll');
 router.get('/api/polls', function(req, res){
   var query = {};
 
+  // Filter by currently logged in users
   if (req.user && req.query.filter && req.query.filter == 'mine') {
     query._id = req.user.id;
   }
 
+  // Get the poll with creators information
   Poll.find().populate('_creator').exec(function(error, polls){
     if (error) {
       return res.status(500).send(error);
@@ -28,6 +30,7 @@ router.get('/api/polls', function(req, res){
 });
 
 router.get('/api/polls/:id', function(req, res){
+  // Get poll with creators information
   Poll.findById(req.params.id).populate('_creator').exec(function(error, poll){
     if (error) {
       return res.status(500).send(error);
@@ -53,7 +56,7 @@ router.delete('/api/polls/:id', function(req, res){
 
   Poll.findById(req.params.id).populate('_creator').exec(function(error, poll){
     if (error) {
-      return res.status(400).send(error);
+      return res.status(500).send(error);
     }
 
     // Check that the user owns the poll
@@ -61,6 +64,7 @@ router.delete('/api/polls/:id', function(req, res){
       return res.status(403).json({ error: 'You do not own this poll' });
     }
 
+    // Delete poll
     Poll.remove({ _id: req.params.id }, function(error){
       if (error) {
         return res.status(400).send(error);
@@ -120,6 +124,7 @@ router.post('/api/polls/:id/vote', function(req, res){
         voted: poll.voted
       };
 
+      // Update poll
       Poll.update({ _id: req.params.id }, { $set: newData }, {}, function(error){
         if (error) {
           return res.status(500).send(error);
@@ -135,6 +140,7 @@ router.post('/api/polls/:id/vote', function(req, res){
 });
 
 router.post('/api/polls', function(req, res){
+  // Make sure the user is logged in
   if (!req.user) {
     return res.status(401).json({ errors: ['You are not logged in'] });
   }
@@ -144,12 +150,13 @@ router.post('/api/polls', function(req, res){
     choices: req.body.choices,
     votes: [],
     voted: {},
-    _creator: req.user.id
+    _creator: req.user.id // Set creator ID, allowing us to `.populate()` it later
   };
 
   var poll = new Poll(data);
 
   Poll.create(data, function(error, poll){
+    // Check validation
     if (error && error.errors) {
       var errors = Object.keys(error.errors).map(function(key){
         return error.errors[key].message;

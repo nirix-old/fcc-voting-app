@@ -12,6 +12,10 @@ var Poll = window.Poll;
 var NewPoll = window.NewPoll;
 var MyPolls = window.MyPolls;
 
+// Load google charts
+google.charts.load('current', {'packages':['corechart']});
+
+// Main application
 var App = React.createClass({
   getInitialState: function(){
     return {
@@ -51,6 +55,7 @@ var App = React.createClass({
   }
 });
 
+// The basic index page
 var Index = React.createClass({
   render: function(){
     return (
@@ -67,20 +72,15 @@ var Index = React.createClass({
   }
 });
 
-google.charts.load('current', {'packages':['corechart']});
-
-ReactDOM.render(
-  (
-    <Router history={browserHistory}>
-      <Route name="root" path="/" component={App}>
-        <IndexRoute component={Index} />
-        <Route name="new-poll" path="new" component={NewPoll} />
-        <Route name="my-polls" path="my-polls" component={MyPolls} />
-        <Route name="polls" path="polls" component={Polls} />
-        <Route name="poll" path="/polls/:id" component={Poll} />
-      </Route>
-    </Router>
-  ),
-  document.getElementById('app-main')
-);
-
+// Routes + render the app
+ReactDOM.render((
+  <Router history={browserHistory}>
+    <Route name="root" path="/" component={App}>
+      <IndexRoute component={Index} />
+      <Route name="new-poll" path="new" component={NewPoll} />
+      <Route name="my-polls" path="my-polls" component={MyPolls} />
+      <Route name="polls" path="polls" component={Polls} />
+      <Route name="poll" path="/polls/:id" component={Poll} />
+    </Route>
+  </Router>
+), document.getElementById('app-main'));

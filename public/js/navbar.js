@@ -2,6 +2,7 @@
 var Link = window.ReactRouter.Link;
 var NavLink = window.NavLink;
 
+// Main navigation bar
 window.NavBar = React.createClass({
   render: function(){
     return (
@@ -26,6 +27,7 @@ window.NavBar = React.createClass({
   }
 });
 
+// The user specific navbar section.
 var UserNav = React.createClass({
   render: function(){
     if (!this.props.user) {
